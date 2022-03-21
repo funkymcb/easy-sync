@@ -1,0 +1,14 @@
+easyverein:
+  endpoint: "/api/stable/"
+  token: "someSuperSecureToken"
+  options:
+    results-per-site: 100 # easyverein provides max limit of 100 members per page
+wordpress:
+  host: "url-of-your-wordpress.page"
+  path: "/wp-json/wp/v2/"
+  user: "api.user"
+  pass: "superSecurePassOfAPIUser"
+  default-password: "SomeCatchyPW" # default password if password createion (date of birth) failed
+  options:
+    results-per-site: 100 # wordpress provides max limit of 100 users per page
+    context: "edit"

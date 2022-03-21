@@ -6,14 +6,22 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
+	"github.com/funkymcb/easy-sync/pkg/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
+var (
+	Version   string
+	GitCommit string
+)
+
+var versionFlag bool
 var cfgFile string
-var version bool
+var Cfg config.EasySyncConfig
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -25,8 +33,8 @@ for guidance run: easy-sync --help
 
 for more information visit:	https://github.com/funkymcb/easy-sync`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if version {
-			fmt.Println("easy-sync verions: 0.0.1")
+		if versionFlag {
+			fmt.Printf("easy-sync version: %s commit: %s\n", Version, GitCommit)
 			os.Exit(0)
 		}
 		if len(args) == 0 {
@@ -55,11 +63,11 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(
 		&cfgFile,
 		"config",
-		"",
-		"config file (default is $HOME/.easy-sync.yaml)",
+		"configs/easy-sync.yaml",
+		"path to config file",
 	)
 	rootCmd.PersistentFlags().BoolVarP(
-		&version,
+		&versionFlag,
 		"version",
 		"v",
 		false,
@@ -74,11 +82,11 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 	} else {
 		// Find home directory.
-		home, err := os.UserHomeDir()
+		configDir, err := os.Getwd()
 		cobra.CheckErr(err)
 
 		// Search config in home directory with name ".easy-sync" (without extension).
-		viper.AddConfigPath(home)
+		viper.AddConfigPath(configDir)
 		viper.SetConfigType("yaml")
 		viper.SetConfigName(".easy-sync")
 	}
@@ -88,5 +96,15 @@ func initConfig() {
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+
+		// unmarshal config file into struct
+		if err := viper.Unmarshal(&Cfg); err != nil {
+			log.Fatalf("unable to decode into config struct %v", err)
+		}
+	} else {
+		fmt.Printf("no config file found under path: %s\n", cfgFile)
+		fmt.Printf("for more information run:\n\n")
+		fmt.Printf("	easy-sync --help\n\n")
+		os.Exit(1)
 	}
 }
