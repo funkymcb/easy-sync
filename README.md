@@ -1,5 +1,5 @@
 # easy-sync-cli
-this cli tool allows you to synch users (members) between various online protal
+this cli tool allows you to synch users (members) between various online portals
 
 # WIP: installation
 for now go and GNU make need to be installed
