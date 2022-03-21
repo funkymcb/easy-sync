@@ -26,7 +26,7 @@ func init() {
 		"platform",
 		"p",
 		"",
-		"the platform the json file shall be synched with. valid: [easyverein (easy), wordpress (wp)]",
+		"the platform the json file shall be synched with.\nvalid platforms: [easyverein (easy), wordpress (wp)]",
 	)
 	synchJSONCmd.MarkFlagRequired("platform")
 }

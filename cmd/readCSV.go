@@ -12,20 +12,21 @@ import (
 var readCmd = &cobra.Command{
 	Use:   "readCSV",
 	Short: "reads a member-list csv and parses it to a JSON file",
-	Long: `read reads a member-list and parses it to a API readable JSON file
+	Long: `readCSV reads a csv member-list and parses it to a JSON file
 
-valid file formats are .csv (more to follow)`,
+example:
+	easy-sync readCSV member-list.csv --delimiter ';' --output result.json`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			fmt.Printf(`file to be read needs to be specified
-eg.: easy-sync readCSV member-list.csv
+eg.: easy-sync readCSV member-list.csv -o result.json
 run: easy-sync readCSV --help for more information
 `)
 			os.Exit(1)
 		}
 		if len(csvDelimiter) > 1 {
 			fmt.Printf(`delimiter of csv needs to be a single character
-eg.: easy-sync readCSV member-list.csv -d ';'
+eg.: easy-sync readCSV member-list.csv -d ';' -o result.json
 run: easy-sync readCSV --help for more information
 `)
 			os.Exit(1)
@@ -45,6 +46,8 @@ func init() {
 		"out/member-list.json",
 		"name of the output file",
 	)
+	readCmd.MarkFlagRequired("output")
+
 	readCmd.Flags().StringVarP(
 		&csvDelimiter,
 		"delimiter",
