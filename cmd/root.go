@@ -94,17 +94,19 @@ func initConfig() {
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+	if !versionFlag {
+		if err := viper.ReadInConfig(); err == nil {
+			fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 
-		// unmarshal config file into struct
-		if err := viper.Unmarshal(&Cfg); err != nil {
-			log.Fatalf("unable to decode into config struct %v", err)
+			// unmarshal config file into struct
+			if err := viper.Unmarshal(&Cfg); err != nil {
+				log.Fatalf("unable to decode into config struct %v", err)
+			}
+		} else {
+			fmt.Printf("no config file found under path: %s\n", cfgFile)
+			fmt.Printf("for more information run:\n\n")
+			fmt.Printf("	easy-sync --help\n\n")
+			os.Exit(1)
 		}
-	} else {
-		fmt.Printf("no config file found under path: %s\n", cfgFile)
-		fmt.Printf("for more information run:\n\n")
-		fmt.Printf("	easy-sync --help\n\n")
-		os.Exit(1)
 	}
 }
