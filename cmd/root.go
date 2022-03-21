@@ -23,6 +23,12 @@ var versionFlag bool
 var cfgFile string
 var Cfg config.EasySyncConfig
 
+var (
+	outputFile   string
+	csvDelimiter string
+	platform     string
+)
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "easy-sync",

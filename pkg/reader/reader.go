@@ -18,7 +18,10 @@ func ReadFile(inFile, outFile, delimiter string) {
 	fmt.Println("read member-list from file:", inFile)
 	records, err := readData(inFile, delimiter)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf(
+			"could not read csv file. make sure to specify the correct csv delimiter using the --delimiter flag. error: %v",
+			err,
+		)
 	}
 
 	// iterate over each record and parse it into member struct
