@@ -66,7 +66,7 @@ func init() {
 		"configs/easy-sync.yaml",
 		"path to config file",
 	)
-	rootCmd.PersistentFlags().BoolVarP(
+	rootCmd.Flags().BoolVarP(
 		&versionFlag,
 		"version",
 		"v",
@@ -96,8 +96,6 @@ func initConfig() {
 	// If a config file is found, read it in.
 	if !versionFlag {
 		if err := viper.ReadInConfig(); err == nil {
-			fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-
 			// unmarshal config file into struct
 			if err := viper.Unmarshal(&Cfg); err != nil {
 				log.Fatalf("unable to decode into config struct %v", err)
