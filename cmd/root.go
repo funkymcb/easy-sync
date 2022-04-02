@@ -9,7 +9,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/funkymcb/easy-sync/pkg/config"
+	"github.com/funkymcb/easy-sync/pkg/models"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -21,7 +21,7 @@ var (
 
 var versionFlag bool
 var cfgFile string
-var Cfg config.EasySyncConfig
+var Cfg models.EasySyncConfig
 
 var (
 	outputFile   string

@@ -1,4 +1,22 @@
-package config
+package models
+
+// EasySyncConfig that represents the configuration for the cli
+type EasySyncConfig struct {
+	Easyverein EasyvereinCfg `mapstructure:"easyverein"`
+	Wordpress  WordpressCfg  `mapstructure:"wordpress"`
+}
+
+// EasyvereinCfg struct that represents all required easyverin configurations
+type EasyvereinCfg struct {
+	Endpoint string               `mapstructure:"endpoint"`
+	Token    string               `mapstructure:"token"`
+	Options  EasyvereinAPIOptions `mapstructure:"options"`
+}
+
+// EasyvereinAPIOptions that represents all easyverein api options
+type EasyvereinAPIOptions struct {
+	ResultsPerSite int `mapstructure:"results-per-site"`
+}
 
 // WordpressCfg struct that contains all required wordpress api configurations
 type WordpressCfg struct {
