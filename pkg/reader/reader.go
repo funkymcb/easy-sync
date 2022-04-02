@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/funkymcb/easy-sync/pkg/models"
+	"golang.org/x/text/encoding/charmap"
 )
 
 var Members []models.Member
@@ -26,39 +27,44 @@ func ReadFile(inFile, outFile, delimiter string) {
 
 	// iterate over each record and parse it into member struct
 	for _, record := range records {
+		username := models.GenerateUsername(record[3], record[4])
+
 		member := models.Member{
-			Ausw:              record[0],
-			MemberID:          record[1],
-			Salution:          record[2],
-			FirstName:         record[3],
-			SecondName:        record[4],
-			Company:           record[5],
-			ShippingMethod:    record[6],
-			AddressSupplement: record[7],
-			Street:            record[8],
-			PostalCode:        record[9],
-			Town:              record[10],
-			Telefone:          record[11],
-			Country:           record[12],
-			IBAN:              record[13],
-			BIC:               record[14],
-			BirthDate:         record[15],
-			BusinessTelefone:  record[16],
-			Fax:               record[17],
-			Mobile:            record[18],
-			EMail:             record[19],
-			Nationality:       record[20],
-			Gender:            record[21],
-			MartialStatus:     record[22],
-			Job:               record[23],
-			Status:            record[24],
-			BankDesignation:   record[25],
-			Entry:             record[26],
-			Termination:       record[27],
-			Department:        record[28],
-			Function:          record[29],
-			MandateNumber:     record[30],
-			Title:             record[31],
+			// MemberID:          record[1],
+			Salution:   record[2],
+			FirstName:  record[3],
+			FamilyName: record[4],
+			Company:    record[5],
+			// ShippingMethod:    record[6],
+			// AddressSupplement: record[7],
+			Street:     record[8],
+			PostalCode: record[9],
+			Town:       record[10],
+			Telefone:   record[11],
+			// Country:           record[12],
+			IBAN:        record[13],
+			BIC:         record[14],
+			DateOfBirth: record[15],
+			// BusinessTelefone:  record[16],
+			Mobile: record[18],
+			EMail:  record[19],
+			// Nationality:       record[20],
+			// MartialStatus:     record[22],
+			// Job:               record[23],
+			// Status:            record[24],
+			// Entry:             record[26],
+			// Termination:       record[27],
+			// Department:        record[28],
+			// Function:          record[29],
+			// MandateNumber:     record[30],
+			Title: record[31],
+			CustomFields: models.CustomFields{
+				Gender:     record[21],
+				BankName:   record[25],
+				Username:   username,
+				Fax:        record[17],
+				Department: record[28],
+			},
 		}
 		Members = append(Members, member)
 	}
@@ -79,7 +85,8 @@ func readData(fileName, delimiter string) ([][]string, error) {
 	}
 	defer f.Close()
 
-	r := csv.NewReader(f)
+	// provide io.reader to csv.reader to decode in utf-8
+	r := csv.NewReader(charmap.ISO8859_15.NewDecoder().Reader(f))
 	delimiterSlice := []rune(delimiter)
 	r.Comma = delimiterSlice[0]
 

@@ -19,7 +19,6 @@ a simpler installation will be added in the future
 - [x] create basic cli handling
 - [x] implement csv file reader
 - [x] implement csv to json decoding
-    - TODO fix umlauts
 - [ ] synch json with easyverein
 - [ ] synch json with wordpress
 - [ ] synch wordpress with easyverein

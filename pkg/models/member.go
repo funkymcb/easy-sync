@@ -1,38 +1,65 @@
 package models
 
+import (
+	"fmt"
+	"strings"
+)
+
 // Member represents the members of our club
 // change this model to your needs
 type Member struct {
-	Ausw              string `json:"ausw"`               // Ausw; TODO what is this field?
-	MemberID          string `json:"member_id"`          // MitglNr;
-	Salution          string `json:"salution"`           // Anrede;
-	FirstName         string `json:"first_name"`         // Vorname;
-	SecondName        string `json:"second_name"`        // Nachname;
-	Company           string `json:"company"`            // Firma;
-	ShippingMethod    string `json:"shipping_method"`    // Versandart;
-	AddressSupplement string `json:"address_supplement"` // Adresszusatz;
-	Street            string `json:"street"`             // Strasse;
-	PostalCode        string `json:"postal_code"`        // PLZ;
-	Town              string `json:"town"`               // Ort;
-	Telefone          string `json:"telefone"`           // Telefon;
-	Country           string `json:"country"`            // Landname;
-	IBAN              string `json:"iban"`               // IBAN;
-	BIC               string `json:"bic"`                // BIC;
-	BirthDate         string `json:"birth_date"`         // Geburtsdatum;
-	BusinessTelefone  string `json:"business_telefone"`  // Telefon (gesch.);
-	Fax               string `json:"fax"`                // Fax; really?
-	Mobile            string `json:"mobile"`             // Mobil;
-	EMail             string `json:"e_mail"`             // E-Mail;
-	Nationality       string `json:"nationality"`        // Staatsangehörigkeit;
-	Gender            string `json:"gender"`             // Geschlecht;
-	MartialStatus     string `json:"martial_status"`     // Familienstand;
-	Job               string `json:"job"`                // Beruf;
-	Status            string `json:"status"`             // Status; TODO what status?
-	BankDesignation   string `json:"bank_designation"`   // Bankbezeichnung;
-	Entry             string `json:"entry"`              // Estringritt;
-	Termination       string `json:"termination"`        // Austritt;
-	Department        string `json:"department"`         // Abteilung;
-	Function          string `json:"function"`           // Funktionen;
-	MandateNumber     string `json:"mandate_number"`     // MandatsNr;
-	Title             string `json:"title"`              // Titel
+	Salution     string       `json:"salution"`     // Anrede;
+	FirstName    string       `json:"firstName"`    // Vorname;
+	FamilyName   string       `json:"familyName"`   // Nachname;
+	Company      string       `json:"companyName"`  // Firma;
+	Street       string       `json:"street"`       // Strasse;
+	PostalCode   string       `json:"zip"`          // PLZ;
+	Town         string       `json:"city"`         // Ort;
+	Telefone     string       `json:"privatePhone"` // Telefon;
+	IBAN         string       `json:"iban"`         // IBAN;
+	BIC          string       `json:"bic"`          // BIC;
+	DateOfBirth  string       `json:"dateOfBirth"`  // Geburtsdatum;
+	Mobile       string       `json:"mobilePhone"`  // Mobil;
+	EMail        string       `json:"privateEmail"` // E-Mail;
+	Title        string       `json:"nameAffix"`    // Titel
+	CustomFields CustomFields `json:"customFields"`
+}
+
+// CustomFields stuct represents the CustomFields
+// which we created for our members.
+// Change to your needs
+type CustomFields struct {
+	Gender           string `json:"gender"`
+	BankName         string `json:"bankName"`
+	Username         string `json:"username"`
+	Fax              string `json:"fax"`
+	TypeOfMembership string `json:"typeOfMembership"`
+	Department       string `json:"department"`
+}
+
+// GenerateUsername creates a username based on firstName and familyName
+// username will look like: firstname.familyname
+func GenerateUsername(firstName, familyName string) string {
+	firstName = strings.ToLower(firstName)
+	familyName = strings.ToLower(familyName)
+	// list all replacements here
+	replacer := strings.NewReplacer(
+		"/", " ",
+		"ä", "ae",
+		"ö", "oe",
+		"ü", "ue",
+		"ß", "ss",
+		"dr. ", "",
+		"(", " ",
+	)
+	firstName = replacer.Replace(firstName)
+	familyName = replacer.Replace(familyName)
+
+	// just use 'first' firstName in case of multiple names
+	firstName = strings.Split(firstName, " ")[0]
+	// just use first familyName in case of multiple names
+	familyName = strings.Split(familyName, " ")[0]
+
+	username := fmt.Sprintf("%s.%s", firstName, familyName)
+	return username
 }
