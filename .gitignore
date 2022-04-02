@@ -1,5 +1,6 @@
 out/
 wvc/
-tmp.json
 
 easy-sync.yaml
+test-result.json
+tmp.json

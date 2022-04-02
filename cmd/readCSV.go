@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/funkymcb/easy-sync/pkg/reader"
@@ -24,15 +25,10 @@ run: easy-sync readCSV --help for more information
 `)
 			os.Exit(1)
 		}
-		if len(csvDelimiter) > 1 {
-			fmt.Printf(`delimiter of csv needs to be a single character
-eg.: easy-sync readCSV member-list.csv -d ';' -o result.json
-run: easy-sync readCSV --help for more information
-`)
-			os.Exit(1)
-		}
 
-		reader.ReadFile(args[0], outputFile, csvDelimiter)
+		if err := reader.ReadFile(args[0], outputFile, csvDelimiter); err != nil {
+			log.Fatal(err)
+		}
 	},
 }
 
