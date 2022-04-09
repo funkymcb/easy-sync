@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"log"
+	"strings"
 
 	"github.com/funkymcb/easy-sync/pkg/synch"
 	"github.com/spf13/cobra"
@@ -19,6 +20,20 @@ if you just want to show what would be synched use the dryrun flag:
 	easy-sync synchJSON --input member-list.json --platform easyverein --dryrun
 `,
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) > 0 {
+			log.Printf("no arguments required. ignoring %v\n", args)
+		}
+
+		validPlatforms := []string{
+			"easyverein", "easy",
+			"wordpress", "wp",
+		}
+		platform = strings.ToLower(platform)
+
+		if !contains(validPlatforms, platform) {
+			log.Fatalf("invalid platform. valid platforms: %v", validPlatforms)
+		}
+
 		if err := synch.JSONtoPlatform(inputFile, platform); err != nil {
 			log.Fatal(err)
 		}
@@ -52,4 +67,14 @@ func init() {
 		false,
 		"shows output of command without performing actions",
 	)
+}
+
+// contains checks if string slice contains a single string
+func contains(vals []string, str string) bool {
+	for _, val := range vals {
+		if val == str {
+			return true
+		}
+	}
+	return false
 }

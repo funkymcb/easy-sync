@@ -1,33 +1,55 @@
 package synch
 
 import (
-	"encoding/json"
-	"fmt"
-	"os"
+	"log"
 
+	"github.com/funkymcb/easy-sync/pkg/collector"
 	"github.com/funkymcb/easy-sync/pkg/models"
+	"github.com/funkymcb/easy-sync/pkg/reader"
 )
 
-var Members []models.Member
+var JSONMembers []models.Member
 
 // JSONtoPlatform reads a json file parses it into the member model
 // and synchs it with the specified platform
 func JSONtoPlatform(inputFile, platform string) error {
-	if err := parseJSONFile(inputFile); err != nil {
+	if err := reader.ParseJSONtoMembers(inputFile, &JSONMembers); err != nil {
 		return err
 	}
-	// TODO write functions that call apis based on given platform
+
+	if platform == "easyverein" || platform == "easy" {
+		if err := JSONtoEasy(); err != nil {
+			return err
+		}
+	}
+	if platform == "wordpress" || platform == "wp" {
+		if err := JSONtoWordpress(); err != nil {
+			return err
+		}
+	}
+	// 2. parse them into member struct
+	// 3. compare jsonMembers with easyMembers
+	// 4. POST diff to easyVerein
+
 	return nil
 }
 
-// parseJSONFile reads json file and parses into member struct
-func parseJSONFile(inputFile string) error {
-	jsonData, err := os.ReadFile(inputFile)
+// JSONtoEasy synchs slice of members with easyverein
+func JSONtoEasy() error {
+	log.Println("get members of easyverein")
+	// get members from easy-verein for comparison
+	easyMembers, err := collector.GetEasyMembers()
 	if err != nil {
-		return fmt.Errorf("could not read json file: %v", err)
+		return err
 	}
-	if err := json.Unmarshal(jsonData, &Members); err != nil {
-		return fmt.Errorf("could not unmarshal json data to member struct: %v", err)
-	}
+
+	// DEBUG output
+	log.Printf("fetched %d members from easyverein", len(easyMembers))
+
+	return nil
+}
+
+// JSONtoWordpress synchs slice of members with wordpress
+func JSONtoWordpress() error {
 	return nil
 }

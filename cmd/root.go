@@ -27,7 +27,7 @@ var (
 
 var (
 	cfgFile string
-	Cfg     models.EasySyncConfig
+	cfg     models.EasySyncConfig
 )
 
 var (
@@ -111,14 +111,15 @@ func initConfig() {
 	if !versionFlag {
 		if err := viper.ReadInConfig(); err == nil {
 			// unmarshal config file into struct
-			if err := viper.Unmarshal(&Cfg); err != nil {
+			if err := viper.Unmarshal(&cfg); err != nil {
 				log.Fatalf("unable to decode into config struct %v", err)
 			}
-		} else {
-			fmt.Printf("no config file found under path: %s\n", cfgFile)
-			fmt.Printf("for more information run:\n\n")
-			fmt.Printf("	easy-sync --help\n\n")
-			os.Exit(1)
+			models.SetConfig(cfg)
 		}
+	} else {
+		fmt.Printf("no config file found under path: %s\n", cfgFile)
+		fmt.Printf("for more information run:\n\n")
+		fmt.Printf("	easy-sync --help\n\n")
+		os.Exit(1)
 	}
 }

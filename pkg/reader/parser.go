@@ -1,9 +1,15 @@
 package reader
 
-import "github.com/funkymcb/easy-sync/pkg/models"
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+
+	"github.com/funkymcb/easy-sync/pkg/models"
+)
 
 // parseMembers reads the csv records and parses them to the members struct
-func parseMembers(records [][]string) []models.Member {
+func parseCSVtoMembers(records [][]string) []models.Member {
 	var members []models.Member
 	// iterate over each record and parse it into member struct
 	for _, record := range records {
@@ -50,4 +56,16 @@ func parseMembers(records [][]string) []models.Member {
 		members = append(members, member)
 	}
 	return members
+}
+
+// ParseJSONFile reads json file and parses into member struct
+func ParseJSONtoMembers(inputFile string, members *[]models.Member) error {
+	jsonData, err := os.ReadFile(inputFile)
+	if err != nil {
+		return fmt.Errorf("could not read json file: %v", err)
+	}
+	if err := json.Unmarshal(jsonData, &members); err != nil {
+		return fmt.Errorf("could not unmarshal json data to member struct: %v", err)
+	}
+	return nil
 }

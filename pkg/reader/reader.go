@@ -27,7 +27,7 @@ func ReadCSV(inFile, outFile, delimiter string) error {
 		)
 	}
 
-	members := parseMembers(records)
+	members := parseCSVtoMembers(records)
 
 	log.Println("writing output to file:", outFile)
 	if err := writer.WriteJSONFile(members, outFile); err != nil {

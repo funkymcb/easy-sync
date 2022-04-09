@@ -233,7 +233,7 @@ func TestParseMembers(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		gotMembers := parseMembers(test.args.records)
+		gotMembers := parseCSVtoMembers(test.args.records)
 		assert.Equal(t, gotMembers, test.want.members, test.name)
 	}
 }

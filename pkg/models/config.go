@@ -1,5 +1,7 @@
 package models
 
+var Cfg EasySyncConfig
+
 // EasySyncConfig that represents the configuration for the cli
 type EasySyncConfig struct {
 	Easyverein EasyvereinCfg `mapstructure:"easyverein"`
@@ -8,6 +10,7 @@ type EasySyncConfig struct {
 
 // EasyvereinCfg struct that represents all required easyverin configurations
 type EasyvereinCfg struct {
+	URL      string               `mapstructure:"url"`
 	Endpoint string               `mapstructure:"endpoint"`
 	Token    string               `mapstructure:"token"`
 	Options  EasyvereinAPIOptions `mapstructure:"options"`
@@ -32,4 +35,14 @@ type WordpressCfg struct {
 type WordpressAPIOptions struct {
 	ResultsPerSite int    `mapstructure:"results-per-site"`
 	Context        string `mapstructure:"context"`
+}
+
+// SetConfig sets the config for global access
+func SetConfig(config EasySyncConfig) {
+	Cfg = config
+}
+
+// GetConfig returns the config
+func GetConfig() EasySyncConfig {
+	return Cfg
 }
