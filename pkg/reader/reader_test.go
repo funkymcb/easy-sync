@@ -59,7 +59,7 @@ func TestReadFile(t *testing.T) {
 
 	for _, test := range tests {
 		var gotErr bool
-		err := ReadFile(test.args.inFile, test.args.outFile, test.args.delimiter)
+		err := ReadCSV(test.args.inFile, test.args.outFile, test.args.delimiter)
 		if err != nil {
 			gotErr = true
 		}
@@ -147,7 +147,7 @@ func TestReadDaata(t *testing.T) {
 
 	for _, test := range tests {
 		var gotErr bool
-		gotData, err := readData(test.args.fileName, test.args.delimiter)
+		gotData, err := readCSVData(test.args.fileName, test.args.delimiter)
 		if err != nil {
 			gotErr = true
 		}

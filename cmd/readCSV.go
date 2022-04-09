@@ -26,7 +26,7 @@ run: easy-sync readCSV --help for more information
 			os.Exit(1)
 		}
 
-		if err := reader.ReadFile(args[0], outputFile, csvDelimiter); err != nil {
+		if err := reader.ReadCSV(args[0], outputFile, csvDelimiter); err != nil {
 			log.Fatal(err)
 		}
 	},

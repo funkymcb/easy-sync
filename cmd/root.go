@@ -19,12 +19,20 @@ var (
 	GitCommit string
 )
 
-var versionFlag bool
-var cfgFile string
-var Cfg models.EasySyncConfig
+// bool flags used by multiple command
+var (
+	versionFlag bool
+	dryrunFlag  bool
+)
+
+var (
+	cfgFile string
+	Cfg     models.EasySyncConfig
+)
 
 var (
 	outputFile   string
+	inputFile    string
 	csvDelimiter string
 	platform     string
 )
