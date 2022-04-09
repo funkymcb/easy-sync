@@ -3,6 +3,7 @@ package reader
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/funkymcb/easy-sync/pkg/models"
@@ -67,5 +68,6 @@ func ParseJSONtoMembers(inputFile string, members *[]models.Member) error {
 	if err := json.Unmarshal(jsonData, &members); err != nil {
 		return fmt.Errorf("could not unmarshal json data to member struct: %v", err)
 	}
+	log.Printf("fetched %d members from %s", len(*members), inputFile)
 	return nil
 }

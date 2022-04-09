@@ -115,11 +115,11 @@ func initConfig() {
 				log.Fatalf("unable to decode into config struct %v", err)
 			}
 			models.SetConfig(cfg)
+		} else {
+			fmt.Printf("no config file found under path: %s\n", cfgFile)
+			fmt.Printf("for more information run:\n\n")
+			fmt.Printf("	easy-sync --help\n\n")
+			os.Exit(1)
 		}
-	} else {
-		fmt.Printf("no config file found under path: %s\n", cfgFile)
-		fmt.Printf("for more information run:\n\n")
-		fmt.Printf("	easy-sync --help\n\n")
-		os.Exit(1)
 	}
 }

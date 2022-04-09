@@ -15,6 +15,7 @@ var (
 	easyMembers []models.Member
 )
 
+// GetEasyMembersResponse represents the responce from the easyverein /member/ endpoint
 type GetEasyMembersResponse struct {
 	Next    string          `json:"next"`
 	Members []models.Member `json:"results"`
@@ -51,6 +52,7 @@ func GetEasyMembers() ([]models.Member, error) {
 		return nil, err
 	}
 
+	// iterate over pages recursively
 	// if next is empty, all pages have been requested
 	if easyMemberResponse.Next != "" {
 		easyMembers = append(easyMembers, easyMemberResponse.Members...)
