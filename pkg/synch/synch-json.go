@@ -59,6 +59,9 @@ func JSONtoEasy() error {
 	}
 	log.Printf("%d members missing in easyverein", len(membersNotInEasy))
 
+	// TODO check comparator for accuracy
+	// TODO implement function to add members to easyverein
+
 	return nil
 }
 

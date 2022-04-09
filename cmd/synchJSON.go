@@ -4,6 +4,7 @@ import (
 	"log"
 	"strings"
 
+	"github.com/funkymcb/easy-sync/pkg/models"
 	"github.com/funkymcb/easy-sync/pkg/synch"
 	"github.com/spf13/cobra"
 )
@@ -34,7 +35,10 @@ if you just want to show what would be synched use the dryrun flag:
 			log.Fatalf("invalid platform. valid platforms: %v", validPlatforms)
 		}
 
-		if err := synch.JSONtoPlatform(inputFile, platform); err != nil {
+		if err := synch.JSONtoPlatform(
+			inputFile,
+			platform,
+		); err != nil {
 			log.Fatal(err)
 		}
 	},
@@ -62,7 +66,7 @@ func init() {
 	synchJSONCmd.MarkFlagRequired("input")
 
 	synchJSONCmd.Flags().BoolVar(
-		&dryrunFlag,
+		&models.DryrunFlag,
 		"dryrun",
 		false,
 		"shows output of command without performing actions",

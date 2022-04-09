@@ -19,12 +19,6 @@ var (
 	GitCommit string
 )
 
-// bool flags used by multiple command
-var (
-	versionFlag bool
-	dryrunFlag  bool
-)
-
 var (
 	cfgFile string
 	cfg     models.EasySyncConfig
@@ -47,10 +41,6 @@ for guidance run: easy-sync --help
 
 for more information visit:	https://github.com/funkymcb/easy-sync`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if versionFlag {
-			fmt.Printf("easy-sync version: %s commit: %s\n", Version, GitCommit)
-			os.Exit(0)
-		}
 		if len(args) == 0 {
 			fmt.Println(cmd.Help())
 			os.Exit(0)
@@ -69,6 +59,11 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
+	rootCmd.Version = fmt.Sprintf(
+		"easy-sync version: %s commit: %s\n",
+		Version,
+		GitCommit,
+	)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -80,12 +75,11 @@ func init() {
 		"configs/easy-sync.yaml",
 		"path to config file",
 	)
-	rootCmd.Flags().BoolVarP(
-		&versionFlag,
-		"version",
-		"v",
+	rootCmd.PersistentFlags().BoolVar(
+		&models.VerboseFlag,
+		"verbose",
 		false,
-		"print version of easy-sync",
+		"add more verbose output to command execution",
 	)
 }
 
@@ -108,18 +102,16 @@ func initConfig() {
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
-	if !versionFlag {
-		if err := viper.ReadInConfig(); err == nil {
-			// unmarshal config file into struct
-			if err := viper.Unmarshal(&cfg); err != nil {
-				log.Fatalf("unable to decode into config struct %v", err)
-			}
-			models.SetConfig(cfg)
-		} else {
-			fmt.Printf("no config file found under path: %s\n", cfgFile)
-			fmt.Printf("for more information run:\n\n")
-			fmt.Printf("	easy-sync --help\n\n")
-			os.Exit(1)
+	if err := viper.ReadInConfig(); err == nil {
+		// unmarshal config file into struct
+		if err := viper.Unmarshal(&cfg); err != nil {
+			log.Fatalf("unable to decode into config struct %v", err)
 		}
+		models.SetConfig(cfg)
+	} else {
+		fmt.Printf("no config file found under path: %s\n", cfgFile)
+		fmt.Printf("for more information run:\n\n")
+		fmt.Printf("	easy-sync --help\n\n")
+		os.Exit(1)
 	}
 }

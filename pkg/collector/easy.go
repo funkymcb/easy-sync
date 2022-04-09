@@ -34,7 +34,9 @@ func GetEasyMembers() ([]models.Member, error) {
 		"contact-details",
 	)
 
-	log.Printf("GET %s?page=%d", url, page)
+	if models.VerboseFlag {
+		log.Printf("GET %s?page=%d", url, page)
+	}
 	_, err := client.R().
 		SetQueryParams(map[string]string{
 			"limit": "100",
